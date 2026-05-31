@@ -25,7 +25,7 @@ grist.onRecord(function (record) {
 
 async function find(name) {
   data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&addressdetails=1&limit=1`).then(response => response.json());
-  id = data.osm_id;
+  id = data[0].osm_id;
   details = await fetch(`https://nominatim.openstreetmap.org/details?osmtype=W&osmid=${id}&format=json`).then(response => response.json());
 
   return {
