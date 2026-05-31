@@ -39,6 +39,7 @@ async function find(name) {
 
   return {
     website: details.tags.website,
+    phone: details.tags.phone,
   };
 }
 
