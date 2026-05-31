@@ -26,10 +26,10 @@ grist.onRecord(function (record) {
 async function find(name) {
   data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&addressdetails=1&limit=1`).then(response => response.json());
   id = data[0].osm_id;
-  details = await fetch(`https://nominatim.openstreetmap.org/details?osmtype=W&osmid=${id}&format=json`).then(response => response.json());
+  details = await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json());
 
   return {
-    website: details.extratags.phone,
+    website: details[0].tags.website,
   };
 }
 
