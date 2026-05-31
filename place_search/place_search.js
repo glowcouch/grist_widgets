@@ -15,7 +15,7 @@ grist.ready({
 
 // keep track of current record
 currentRecord = null;
-grist.onRecord(function(record) {
+grist.onRecord(function (record) {
   console.log("new current record");
   currentRecord = record;
   if (currentRecord != null) {
@@ -23,7 +23,17 @@ grist.onRecord(function(record) {
   }
 });
 
-async function update () {
+async function find(name) {
+  data = await fetch(`https://nominatim.openstreetmap.org/search?q=${name}&format=json&addressdetails=1&limit=1`).then(response => response.json());
+  id = data.osm_id;
+  details = await fetch(`https://nominatim.openstreetmap.org/details?osmtype=W&osmid=${id}&format=json`).then(response => response.json());
+
+  return {
+    website: details.extratags.phone,
+  };
+}
+
+async function update() {
   if (currentRecord != null) {
     startLoading();
 
@@ -32,10 +42,7 @@ async function update () {
     table = grist.getTable();
     await table.update({
       id: currentRecord.id,
-      fields: {
-        name: 'New name',
-        website: 'http://www.google.com'
-      }
+      fields: await find(currentRecord.name),
     });
 
     stopLoading();
