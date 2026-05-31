@@ -37,9 +37,12 @@ async function find(name) {
   id = data[0].osm_id;
   details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
 
+  lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${id}&format=json&extratags=1`).then(response => response.json()))[0];
+
   return {
     website: details.tags.website,
     phone: details.tags.phone,
+    address: lookup.display_name
   };
 }
 
