@@ -9,21 +9,25 @@ function stopLoading() {
   button.ariaBusy = false;
 }
 
-allRecords = [];
-grist.onRecords(async (records, mappings) => {
-  allRecords = records;
-})
+grist.ready({
+  requiredAccess: 'read table'
+});
 
-console.log("hi");
-console.log(allRecords);
+// keep track of current record
+currentRecord = null;
+grist.onRecord(function(record) {
+  console.log("new current record");
+  currentRecord = record;
+});
 
 async function update () {
   startLoading();
 
+  console.log(currentRecord);
+
   table = grist.getTable();
-  console.log(table);
   await table.update({
-    id: 1,
+    id: currentRecord.id,
     fields: {
       name: 'New name',
       website: 'http://www.google.com'
