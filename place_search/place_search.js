@@ -10,7 +10,7 @@ function stopLoading() {
 }
 
 grist.ready({
-  requiredAccess: 'read table'
+  requiredAccess: 'full'
 });
 
 // keep track of current record
@@ -18,21 +18,26 @@ currentRecord = null;
 grist.onRecord(function(record) {
   console.log("new current record");
   currentRecord = record;
+  if (currentRecord != null) {
+    button.disabled = false;
+  }
 });
 
 async function update () {
-  startLoading();
+  if (currentRecord != null) {
+    startLoading();
 
-  console.log(currentRecord);
+    console.log(currentRecord);
 
-  table = grist.getTable();
-  await table.update({
-    id: currentRecord.id,
-    fields: {
-      name: 'New name',
-      website: 'http://www.google.com'
-    }
-  });
+    table = grist.getTable();
+    await table.update({
+      id: currentRecord.id,
+      fields: {
+        name: 'New name',
+        website: 'http://www.google.com'
+      }
+    });
 
-  stopLoading();
+    stopLoading();
+  }
 }
