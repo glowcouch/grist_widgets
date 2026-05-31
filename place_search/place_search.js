@@ -35,16 +35,21 @@ async function find(name) {
 
 async function update() {
   if (currentRecord != null) {
-    startLoading();
+    try {
+      startLoading();
 
-    console.log(currentRecord);
+      console.log(currentRecord);
 
-    table = grist.getTable();
-    await table.update({
-      id: currentRecord.id,
-      fields: await find(currentRecord.name),
-    });
+      table = grist.getTable();
+      await table.update({
+        id: currentRecord.id,
+        fields: await find(currentRecord.name),
+      });
 
-    stopLoading();
+      stopLoading();
+
+    } catch (e) {
+      alert(e);
+    }
   }
 }
