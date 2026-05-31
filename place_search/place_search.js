@@ -1,6 +1,8 @@
 button = document.getElementById("update");
 button.addEventListener("click", update);
 
+search = document.getElementById("search");
+
 function startLoading() {
   button.ariaBusy = true;
 }
@@ -20,6 +22,7 @@ grist.onRecord(function (record) {
   currentRecord = record;
   if (currentRecord != null) {
     button.disabled = false;
+    search.value = currentRecord.name; // pre-fill search bar with name
   }
 });
 
@@ -43,7 +46,7 @@ async function update() {
       table = grist.getTable();
       await table.update({
         id: currentRecord.id,
-        fields: await find(currentRecord.name),
+        fields: await find(search.value),
       });
 
       stopLoading();
