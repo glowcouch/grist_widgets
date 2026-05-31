@@ -9,6 +9,14 @@ function stopLoading() {
   button.ariaBusy = false;
 }
 
+allRecords = [];
+grist.onRecords(async (records, mappings) => {
+  allRecords = records;
+})
+
+console.log("hi");
+console.log(allRecords);
+
 async function update () {
   startLoading();
 
