@@ -26,8 +26,14 @@ grist.onRecord(function (record) {
   }
 });
 
+/// Returns null when object couldn't be found
 async function find(name) {
   data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&addressdetails=1&limit=1`).then(response => response.json());
+
+  if (data.length == 0) {
+    return null;
+  }
+
   id = data[0].osm_id;
   details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
 
@@ -43,10 +49,16 @@ async function update() {
 
       console.log(currentRecord);
 
+      fields = await find(search.value);
+
+      if (fields == null) {
+        alert("no results")
+      }
+
       table = grist.getTable();
       await table.update({
         id: currentRecord.id,
-        fields: await find(search.value),
+        fields: fields,
       });
 
       stopLoading();
