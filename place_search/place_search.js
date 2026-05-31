@@ -22,7 +22,13 @@ grist.onRecord(function (record) {
   currentRecord = record;
   if (currentRecord != null) {
     button.disabled = false;
-    search.value = currentRecord.name; // pre-fill search bar with name
+
+    // pre-fill search bar with name or ideally address
+    if (currentRecord.address != null) {
+      search.value = currentRecord.address;
+    } else {
+      search.value = currentRecord.name;
+    }
   }
 });
 
@@ -37,7 +43,7 @@ async function find(name) {
   id = data[0].osm_id;
   details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
 
-  lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${id}&format=json&extratags=1`).then(response => response.json()))[0];
+  lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
 
   return {
     website: details.tags.website,
