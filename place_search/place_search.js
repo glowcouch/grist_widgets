@@ -13,6 +13,7 @@ async function update () {
   startLoading();
 
   table = grist.getTable();
+  console.log(table);
   await table.update({
     id: 1,
     fields: {
