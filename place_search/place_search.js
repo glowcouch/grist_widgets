@@ -24,10 +24,10 @@ grist.onRecord(function (record) {
     button.disabled = false;
 
     // pre-fill search bar with name or ideally address
-    if (currentRecord.address != null) {
-      search.value = currentRecord.address;
-    } else {
+    if (currentRecord.address == null || currentRecord.address == "") {
       search.value = currentRecord.name;
+    } else {
+      search.value = currentRecord.address;
     }
   }
 });
