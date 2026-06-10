@@ -28,6 +28,16 @@ async function update() {
       }
     ).then((data) => data.json());
     console.log("received overpass response", result);
+
+    table = grist.getTable();
+    result.elements.forEach(element => {
+      table.create({
+        fields: {
+          name: element.tags.name,
+        }
+      });
+    });
+
   } catch (e) {
     alert(e);
   }
