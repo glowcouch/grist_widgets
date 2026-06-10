@@ -1,7 +1,7 @@
-button = document.getElementById("update");
+let button = document.getElementById("update");
 button.addEventListener("click", update);
 
-search = document.getElementById("search");
+let search = document.getElementById("search");
 
 function startLoading() {
   button.ariaBusy = true;
@@ -16,7 +16,7 @@ grist.ready({
 });
 
 // keep track of current record
-currentRecord = null;
+let currentRecord = null;
 grist.onRecord(function (record) {
   console.log("new current record");
   currentRecord = record;
@@ -34,16 +34,16 @@ grist.onRecord(function (record) {
 
 /// Returns null when object couldn't be found
 async function find(name) {
-  data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&addressdetails=1&limit=1`).then(response => response.json());
+  let data = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&addressdetails=1&limit=1`).then(response => response.json());
 
   if (data.length == 0) {
     return null;
   }
 
-  id = data[0].osm_id;
-  details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
+  let id = data[0].osm_id;
+  let details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
 
-  lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
+  let lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
 
   return {
     website: details.tags.website,
@@ -59,13 +59,13 @@ async function update() {
     try {
       console.log(currentRecord);
 
-      fields = await find(search.value);
+      let fields = await find(search.value);
 
       if (fields == null) {
         alert("no results")
       }
 
-      table = grist.getTable();
+      let table = grist.getTable();
       await table.update({
         id: currentRecord.id,
         fields: fields,

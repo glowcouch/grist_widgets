@@ -1,7 +1,7 @@
-button = document.getElementById("overpass");
+let button = document.getElementById("overpass");
 button.addEventListener("click", update);
 
-search = document.getElementById("overpass_query");
+let search = document.getElementById("overpass_query");
 
 function startLoading() {
   button.ariaBusy = true;
@@ -20,7 +20,7 @@ async function update() {
   try {
     console.log("running query", search.value);
 
-    result = await fetch(
+    let result = await fetch(
       "https://overpass-api.de/api/interpreter",
       {
         method: "POST",
@@ -29,7 +29,7 @@ async function update() {
     ).then((data) => data.json());
     console.log("received overpass response", result);
 
-    table = grist.getTable();
+    let table = grist.getTable();
     result.elements.forEach(element => {
       table.create({
         fields: {
