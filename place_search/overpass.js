@@ -30,16 +30,16 @@ async function update() {
     console.log("received overpass response", result);
 
     let table = grist.getTable();
-    result.elements.forEach(element => {
-      table.create({
+    table.create(result.elements.map(element => {
+      return {
         fields: {
           name: element.tags.name,
           address: element.tags["addr:housenumber"] + " " + element.tags["addr:street"] + " " + element.tags["addr:suburb"],
           website: element.tags.website,
           phone: element.tags.phone,
         }
-      });
-    });
+      };
+    }));
 
   } catch (e) {
     alert(e);
