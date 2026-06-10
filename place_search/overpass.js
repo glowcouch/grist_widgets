@@ -45,7 +45,7 @@ async function update() {
       }
 
       console.log("fetching nominatim for", id);
-      let lookup = (fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${type}${id}&format=json&extratags=1`).then(response => response.json()))[0];
+      let lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${type}${id}&format=json&extratags=1`).then(response => response.json()))[0];
       console.log("received nominatim response", lookup);
 
       // wait so that nominatim doesn't ratelimit us
