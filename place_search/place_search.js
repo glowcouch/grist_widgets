@@ -54,9 +54,9 @@ async function find(name) {
 
 async function update() {
   if (currentRecord != null) {
-    try {
-      startLoading();
+    startLoading();
 
+    try {
       console.log(currentRecord);
 
       fields = await find(search.value);
@@ -71,10 +71,10 @@ async function update() {
         fields: fields,
       });
 
-      stopLoading();
-
     } catch (e) {
       alert(e);
     }
+
+    stopLoading();
   }
 }

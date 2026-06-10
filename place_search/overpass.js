@@ -16,5 +16,20 @@ grist.ready({
 });
 
 async function update() {
-  console.log("running query", search.value);
+  startLoading();
+  try {
+    console.log("running query", search.value);
+
+    result = await fetch(
+      "https://overpass-api.de/api/interpreter",
+      {
+        method: "POST",
+        body: "data=" + encodeURIComponent(search.value),
+      }
+    ).then((data) => data.json());
+    console.log("received overpass response", result);
+  } catch (e) {
+    alert(e);
+  }
+  stopLoading();
 }
