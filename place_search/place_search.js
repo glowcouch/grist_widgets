@@ -15,14 +15,6 @@ grist.ready({
   requiredAccess: 'full'
 });
 
-stedamaps_key = await grist.getOption('stedamaps_key');
-document.getElementById("stedamaps_key").addEventListener("click", function () {
-  prompt("Enter your stedamaps key", stedamaps_key).then(function (key) {
-    stedamaps_key = key;
-    grist.setOption('stedamaps_key', stedamaps_key);
-  })
-});
-
 // keep track of current record
 currentRecord = null;
 grist.onRecord(function (record) {

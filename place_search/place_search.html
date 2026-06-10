@@ -8,10 +8,17 @@
   </head>
   <body>
     <main id="readout">
-      <input id="search" type="text" placeholder="search...">
-      <button id="update" disabled>update data</button>
-      <button id="stedamaps_key">update stedamaps key</button>
+      <fieldset role="group">
+        <input id="search" type="text" placeholder="search...">
+        <button id="update" disabled>update data</button>
+      </fieldset>
+
+      <fieldset role="group">
+        <textarea id="overpass_query">
+        <button id="overpass">run overpass query</button>
+      </fieldset>
     </main>
     <script src = "./place_search.js"></script>
+    <script src = "./overpass.js"></script>
   </body>
 </html>
