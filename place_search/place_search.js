@@ -41,9 +41,18 @@ async function find(name) {
   }
 
   let id = data[0].osm_id;
-  let details = (await fetch(`https://www.openstreetmap.org/api/0.6/way/${id}.json`).then(response => response.json())).elements[0];
+  let type;
+  if (data[0].osm_type == 'way') {
+    type = 'W';
+  } else if (data[0].osm_type == 'node') {
+    type = 'N';
+  } else if (data[0].osm_type == 'relation') {
+    type = 'R';
+  }
 
-  let lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
+  let details = (await fetch(`https://www.openstreetmap.org/api/0.6/${data[0].osm_type}/${id}.json`).then(response => response.json())).elements[0];
+
+  let lookup = (await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${type}${id}&format=json&extratags=1`).then(response => response.json()))[0];
 
   return {
     website: details.tags.website,

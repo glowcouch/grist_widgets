@@ -35,8 +35,17 @@ async function update() {
     for (const element of result.elements) {
       // lookup on nomanatim for display address
       let id = element.id;
+      let type;
+      if (element.type == 'way') {
+        type = 'W';
+      } else if (element.type == 'node') {
+        type = 'N';
+      } else if (element.type == 'relation') {
+        type = 'R';
+      }
+
       console.log("fetching nominatim for", id);
-      let lookup = (fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
+      let lookup = (fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${type}${id}&format=json&extratags=1`).then(response => response.json()))[0];
       console.log("received nominatim response", lookup);
 
       // wait so that nominatim doesn't ratelimit us
