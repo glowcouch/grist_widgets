@@ -34,6 +34,9 @@ async function update() {
       table.create({
         fields: {
           name: element.tags.name,
+          address: element.tags["addr:housenumber"] + " " + element.tags["addr:street"] + " " + element.tags["addr:suburb"],
+          website: element.tags.website,
+          phone: element.tags.phone,
         }
       });
     });
