@@ -20,6 +20,7 @@ async function update() {
   try {
     console.log("running query", search.value);
 
+    // query on overpass
     let result = await fetch(
       "https://overpass-api.de/api/interpreter",
       {
@@ -30,16 +31,20 @@ async function update() {
     console.log("received overpass response", result);
 
     let table = grist.getTable();
-    table.create(result.elements.map(element => {
+    table.create(await Promise.all(result.elements.map(async (element) => {
+      // lookup on nomanatim for display address
+      let id = element.id;
+      let lookup = (fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
+
       return {
         fields: {
           name: element.tags.name,
-          address: element.tags["addr:housenumber"] + " " + element.tags["addr:street"] + " " + element.tags["addr:suburb"],
+          address: lookup.display_name,
           website: element.tags.website,
           phone: element.tags.phone,
         }
       };
-    }));
+    })));
 
   } catch (e) {
     alert(e);
