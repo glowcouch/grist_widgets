@@ -31,21 +31,27 @@ async function update() {
     console.log("received overpass response", result);
 
     let table = grist.getTable();
-    table.create(await Promise.all(result.elements.map(async (element) => {
+    let records = [];
+    for (const element of result.elements) {
       // lookup on nomanatim for display address
       let id = element.id;
+      console.log("fetching nominatim for", id);
       let lookup = (fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=W${id}&format=json&extratags=1`).then(response => response.json()))[0];
+      console.log("received nominatim response", lookup);
 
-      return {
+      // wait so that nominatim doesn't ratelimit us
+      await new Promise(r => setTimeout(r, 1500));
+
+      records.push({
         fields: {
           name: element.tags.name,
           address: lookup.display_name,
           website: element.tags.website,
           phone: element.tags.phone,
         }
-      };
-    })));
-
+      });
+    }
+    table.create(records);
   } catch (e) {
     alert(e);
   }
