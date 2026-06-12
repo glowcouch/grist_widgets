@@ -57,6 +57,8 @@ async function update() {
           address: lookup.display_name,
           website: element.tags.website,
           phone: element.tags.phone,
+          lat: element.lat,
+          lon: element.lon,
         }
       });
     }

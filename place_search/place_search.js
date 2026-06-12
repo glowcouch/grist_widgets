@@ -57,7 +57,9 @@ async function find(name) {
   return {
     website: details.tags.website,
     phone: details.tags.phone,
-    address: lookup.display_name
+    address: lookup.display_name,
+    lat: details.lat,
+    lon: details.lon
   };
 }
 
