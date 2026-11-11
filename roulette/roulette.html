@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #16b378;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #12996a; }
+    button:disabled { background: #bbb; cursor: default; }
+  </style>
+</head>
+<body>
+  <button id="pick" disabled>🎲 Random card</button>
+
+  <script>
+    let ids = [];
+    let lastId = null;
+    let firstLoad = true;
+
+    function pickRandom() {
+      if (!ids.length) return;
+      let id;
+      do {
+        id = ids[Math.floor(Math.random() * ids.length)];
+      } while (ids.length > 1 && id === lastId);
+      lastId = id;
+      grist.setCursorPos({ rowId: id });
+    }
+
+    grist.ready({ requiredAccess: 'read table', allowSelectBy: true });
+
+    grist.onRecords(records => {
+      ids = records.map(r => r.id);
+      document.getElementById('pick').disabled = ids.length === 0;
+      if (firstLoad && ids.length) {
+        firstLoad = false;
+        pickRandom();
+      }
+    });
+
+    document.getElementById('pick').onclick = pickRandom;
+  </script>
+</body>
+</html>
