@@ -32,7 +32,6 @@
   <script>
     let ids = [];
     let lastId = null;
-    let firstLoad = true;
 
     function pickRandom() {
       if (!ids.length) return;
@@ -49,10 +48,6 @@
     grist.onRecords(records => {
       ids = records.map(r => r.id);
       document.getElementById('pick').disabled = ids.length === 0;
-      if (firstLoad && ids.length) {
-        firstLoad = false;
-        pickRandom();
-      }
     });
 
     document.getElementById('pick').onclick = pickRandom;
